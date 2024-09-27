@@ -1,8 +1,8 @@
 # Identificação
 
-* Nome: 
-* Email (@ccc): 
-* Matrícula: 
+* Nome: Nathan Amaro Trajano
+* Email (@ccc): nathan.amaro.trajano@ccc.ufcg.edu.br
+* Matrícula: 123110463
 
 # Roteiro: isAVL
 
