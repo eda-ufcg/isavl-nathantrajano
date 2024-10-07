@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BST {
 
@@ -11,9 +13,79 @@ public class BST {
         if(isEmpty()){
             return true;
         }
-        return -1 <= balance(root) && balance(root) <= 1;
+        // return -1 <= balance(root) && balance(root) <= 1;
+        Node esquerda = min();
+        Node direita = max();
+        while(isBalanced(esquerda) && isBalanced(direita)){
+            if(esquerda.parent != null){
+                esquerda = esquerda.parent;
+            }
+            if(direita.parent != null){
+                direita = direita.parent;
+            }
+            if(esquerda.equals(root) && direita.equals(root)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isBalanced(Node node){
+        return -1 <= balance(node) && balance(node) <= 1;
     }
 
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String[] entrada = sc.nextLine().split(" ");
+        BST arvore = new BST();
+        for(String i : entrada){
+            arvore.add(Integer.parseInt(i));
+        }
+        arvore.ajeita();
+    }
+
+    public void ajeita(){
+        Node node = root;
+        if(balance(node)> 1){
+            node = node.left;
+            if(balance(node) == 1){
+                rotate_dir(node.parent);
+            }
+            if(balance(node) == -1){
+                rotate_esq(node.parent);
+            }
+            
+        }
+        
+    }
+    private void rotate_dir(Node pai){
+        Node novoPai = pai.left;
+        pai.left = novoPai.right;
+
+        if(novoPai.right != null) {
+            novoPai.right.parent = pai;
+        }
+        novoPai.right = pai;
+        novoPai.parent = pai.parent;
+
+        if(pai == this.root) {
+            this.root = novoPai;
+
+        } else {
+            if(pai == pai.parent.left) {
+                pai.parent.left = novoPai;
+            }
+            else {
+                pai.parent.right = novoPai;
+            }
+        }
+
+        pai.parent = novoPai;
+        
+    }
+    private void rotate_esq(Node node){
+        
+    }
     /**
      * Retorna a altura da árvore.
      */
@@ -101,8 +173,8 @@ public class BST {
     
     
     /**
-     * Retorna o nó que contém o valor máximo da árvore. Implementação recursiva.
-     * @return o nó contendo o valor máximo da árvore ou null se a árvore estiver vazia.
+     * Retorna o nó que contém o valor Minimo da árvore. Implementação recursiva.
+     * @return o nó contendo o valor Minimo da árvore ou null se a árvore estiver vazia.
      */
     public Node min() {
         if (isEmpty()) return null;
@@ -110,9 +182,9 @@ public class BST {
     }
     
     /**
-     * Retorna o nó que contém o valor máximo da árvore cuja raiz é passada como parâmetro. Implementação recursiva.
+     * Retorna o nó que contém o valor Minimo da árvore cuja raiz é passada como parâmetro. Implementação recursiva.
      * @param a raiz da árvore.
-     * @return o nó contendo o valor máximo da árvore ou null se a árvore estiver vazia.
+     * @return o nó contendo o valor Minimo da árvore ou null se a árvore estiver vazia.
      */
     private Node min(Node node) {
         if (node.left == null) return node;
@@ -243,17 +315,6 @@ public class BST {
         
     }
     
-    public static void main(String[] args) {
-        BST bst = new BST();
-    	assert(bst.isAVL());
-    	int[] values = new int[]{41,20,11,29,
-    		32,65,50,91,72,99};
-    	for (int i : values)
-    		bst.add(i);
-        bst.isAVL();
-    	assert(bst.isAVL());
-    }
-
     /**
      * Remove node. Private method to control recursion.
      * @param toRemove
