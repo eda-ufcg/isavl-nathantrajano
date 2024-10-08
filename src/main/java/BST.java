@@ -86,6 +86,32 @@ public class BST {
     private void rotate_esq(Node node){
         
     }
+    public boolean isLeftPending(Node node){
+        return balance(node) == 1;
+    }
+    public boolean isRightPending(Node node){
+        return balance(node) == -1;
+    }
+    public boolean isbalanced(Node node){
+        return balance(node) == 0;
+    }
+
+    public void caso1(Node x,Node y,Node z){
+        y = z.parent;
+        x = y.parent;
+
+        if(isLeftPending(x) && y.left == z){
+            rotate_dir(x);
+        }
+    }
+    public void caso2(Node x,Node y,Node z){
+        y = z.parent;
+        x = y.parent;
+
+        if(isRightPending(x) && y.left == z){
+            rotate_dir(x);
+        }
+    }
     /**
      * Retorna a altura da árvore.
      */
